@@ -1,0 +1,44 @@
+Dear Chen,
+
+You managed to obtain the lightcuvers and you have passed the observing
+course - congratulations.
+
+I found my reduced images have negative background, could this be caused
+by dark frame subtraction?
+
+If the reduction is done properly the backgroud is positive.
+I have checked the 22 Aug 2019 night.
+The average bias is 325.6
+The average dark is 3.7 - this is after bias subtraction
+    and has to be scaled by the exposure time (*25/300) while subtracting
+    from the science images.
+An example reduced image background is 138.0 (ab_and-0020V1.fits)
+
+
+I have few additional comments.
+
+- The scripts you have used are not perfect for our data - we were doing
+a series of dark frames for the whole nights, while the scripts assume
+to have the dark exposures mixed with the science frames.
+
+- The tradition in stellar optical photometry is to present the light curves
+in magnitudes, not in normalized flux units. Please take a look at the
+example light curve from 22 Aug 2019 in V (attached).
+
+Best regards,
+Wojtek
+
+******************************************************************************
+Wojtek Pych                       e-mail: pych@camk.edu.pl
+CAMK PAN                          http://users.camk.edu.pl/pych/index.html
+ul. Bartycka 18                   phone: +48 (22) 32 96 107
+00-716 Warszawa, POLAND           fax: +48 (22) 841 00 46
+******************************************************************************
+
+QC: 向守平《天体物理概论》Eq.2.2 
+m2-m1 = -2.5 lg (E2/E1)
+Then I need to have a reference star and know its magnetitude m1.
+
+
+
+

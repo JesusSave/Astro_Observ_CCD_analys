@@ -1,0 +1,78 @@
+######################################################################
+## CCD REDUCTION AND PRODUCING LIGHT CURVE FIGURES PROCESS USING PYTHON
+## AUTHOR : QIANG CHEN chen@camk.edu.pl
+## DATE   : 2020 Sep 26
+##
+# PYTHON ENVIRONMENT REQUIREMENT:
+# - pip install astropy # reduction
+# - pip install --no-deps ccdproc # reduction
+# - pip install photutils # photometry
+# - pip install astroalign # align the figure or coordinates arrays
+# alternatively can use (CAMK):
+#   source /home/chen/python-chen/chen3.6/bin/activate
+#
+# REFERENCE : CCD REDUCTION https://mwcraig.github.io/ccd-as-book/00-00-Preface.html
+# REMAINS : 
+# - Dark frames lack exposure choice, 300 sec make the bg negative!
+# - pip install aplpy # I don't know how to use it
+# - The bad pixels are not specified, will consider when needed
+# - pip install drizzlepac # PYRAF, align the images 
+#####################################################################
+
+
+path = '/work/chuck/chen/obs/20190822'
+
+1, create master bias
+  Script  : make_master_bias.py
+  Input   : path/*.fit
+  Output  : path/reduced/combined_bias.fit
+
+2, create master dark
+  Script  : make_master_dark.py
+  Input   : path/*.fit
+  Output  : path/reduced/combined_dark_300.000.fit
+
+3, carete master flat
+  Script  : make_master_flat.py 
+  Input   : path/*.fit
+  Output  : path/reduced/flat_*.fit
+
+4, reduce science figure
+  Script  : calibrate_science_images.py 
+  Input   : path/reduced/combined_bias.fit
+            path/reduced/flat_*.fit
+            path/reduced/combined_dark_300.000.fit
+  Output  : path/reduced/light_*.fit
+
+5.1 identify apperture parameters : fwhm, threshold
+  Tips    : try to improve fwhm and threshold to select < 50 stars
+  Script  : apperture_photometry_check.py
+  Input   : path/reduced/*.fit
+  Output  : path/reduced/stars_*.dat
+
+5.2, apperture photometry
+  Script  : aperture_photometry.py
+  Input   : path/reduced/*.fit
+  Output  : path/reduced/stars_*.dat
+
+6, sorting stars of similar coordinates in the star data files
+  Script  : stars_sorting_v2.py 
+  Input   : path/reduced/stars_*.dat
+  Output  : path/reduced/sorted_stars_{FILTER}*.dat
+            path/reduced/sorted_ap_{FILTER}*.dat
+            path/reduced/aligned_lightes_*_{FILTER}*.dat  
+
+7.1 plot the light curve figures
+  Script  : plot_light_curve.py
+  Input   : path/reduced/sorted_stars_{FILTER}*.dat
+            path/reduced/sorted_ap_{FILTER}*.dat
+  Output  : path/reduced/sorted_stars_{FILTER}*.png
+            path/reduced/sorted_ap_{FILTER}*.png
+  Tips    : manualy find out which light curve figure looks like target object
+
+7.2 plot the AB variable light curve
+  Script  : plot_target_lightcurve.py
+  Input   : path/reduced/sorted_stars_B18.dat 
+            path/reduced/sorted_stars_V31.dat
+  Output  : path/reduced/final_AB.png
+
